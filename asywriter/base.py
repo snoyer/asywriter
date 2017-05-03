@@ -47,7 +47,7 @@ class AsyBase(object) :
         self.file.write(line + '\n')
 
 
-    def compile(self, filename=None, asy_path='asy') :
+    def compile(self, filename=None, include=None, asy_path='asy') :
         if not filename :
             filename = self.filename.replace('.asy', '') + '.pdf'
 
@@ -58,6 +58,14 @@ class AsyBase(object) :
             self.filename
         ]
 
+        if include is not None:
+            if isinstance(include, str) :
+                include = [include]
+            with tempfile.NamedTemporaryFile('w', suffix='.asy', delete=False) as cfg :
+                print >>cfg, 'import settings;'
+                print >>cfg, 'dir = "' + ':'.join(map(os.path.abspath, include)) + '";'
+                compile_cmd += ['-config', cfg.name]
+
         self.file.flush()
         process = subprocess.Popen(
             compile_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
@@ -65,6 +73,8 @@ class AsyBase(object) :
         out,err = process.communicate()
         if process.returncode != 0 :
             raise AsyError(err)
+
+        #TODO cleanup temp file if any
 
 
 class AsyError(StandardError) :
