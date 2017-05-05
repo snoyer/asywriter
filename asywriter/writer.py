@@ -37,7 +37,9 @@ class AsyWriter(object) :
 
 
     def line(self, points, pen='black', label=None, transform=None) :
-        self.asy.draw(self._quote(label), self._path(points, transform=transform), self._pen(pen))
+        path = self._path(points, transform=transform)
+        if path :
+            self.asy.draw(self._quote(label), path, self._pen(pen))
 
 
     def polygon(self, points, stroke='black', fill=None, label=None, transform=None) :
@@ -45,12 +47,11 @@ class AsyWriter(object) :
 
 
     def complex_polygon(self, pointss, stroke='black', fill=None, label=None, transform=None) :
+        path = self._complexpath(pointss, transform)
         call = self._which_filldraw(fill, stroke)
-        if call :
+        if path and call :
             self.asy.call(call, self._quote(label),
-                          self._complexpath(pointss, transform),
-                          self._pen(fill), self._pen(stroke)
-                         )
+                          path, self._pen(fill), self._pen(stroke))
 
 
     def circle(self, center, radius, stroke='black', fill=None, label=None, transform=None) :
@@ -58,8 +59,7 @@ class AsyWriter(object) :
         if call :
             self.asy.call(call, self._quote(label),
                           self._circle(center, radius, transform),
-                          self._pen(fill), self._pen(stroke)
-                         )
+                          self._pen(fill), self._pen(stroke))
 
 
     def _which_filldraw(self, fill, stroke) :
