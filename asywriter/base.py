@@ -22,6 +22,14 @@ class AsyBase(object) :
     def comment(self, txt) :
         self.writeline('/* ' + txt + ' */')
 
+    def linecomment(self, txt, pad=0) :
+        comment = '// '+txt.replace('\n','')+ ' '
+        self.writeline(comment.ljust(pad, '/'))
+
+
+    def declare_variable(self, datatype, name, value) :
+        self.writeline('%s %s = %s;' % (datatype, name, value))
+
 
     def draw(self, *args) :
         self.call('draw', *args)
@@ -43,8 +51,11 @@ class AsyBase(object) :
         self.call('dot', *args)
 
 
-    def writeline(self, line) :
-        self.file.write(line + '\n')
+    def write(self, txt) :
+        self.file.write(txt)
+
+    def writeline(self, txt='') :
+        self.file.write(txt + '\n')
 
 
     def compile(self, filename=None, include=None, asy_path='asy') :

@@ -7,5 +7,7 @@ setup(name='asywriter',
     author='snoyer',
     author_email='reach me on github',
     packages=['asywriter'],
-    zip_safe=False
+    package_data={'asywriter': ['*.asy']},
+    include_package_data=True,
+    zip_safe=False,
 )
