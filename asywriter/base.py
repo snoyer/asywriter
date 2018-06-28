@@ -52,10 +52,10 @@ class AsyBase(object) :
 
 
     def write(self, txt) :
-        self.file.write(txt)
+        self.file.write(txt.encode('utf8'))
 
     def writeline(self, txt='') :
-        self.file.write(txt + '\n')
+        self.file.write((txt + '\n').encode('utf8'))
 
 
     def compile(self, filename=None, include=None, asy_path='asy') :
@@ -73,8 +73,10 @@ class AsyBase(object) :
             if isinstance(include, str) :
                 include = [include]
             with tempfile.NamedTemporaryFile('w', suffix='.asy', delete=False) as cfg :
-                print >>cfg, 'import settings;'
-                print >>cfg, 'dir = "' + ':'.join(map(os.path.abspath, include)) + '";'
+                cfg.write('\n'.join([
+                    'import settings;',
+                    'dir = "' + ':'.join(map(os.path.abspath, include)) + '";',
+                ]))
                 compile_cmd += ['-config', cfg.name]
 
         self.file.flush()
@@ -88,5 +90,5 @@ class AsyBase(object) :
         #TODO cleanup temp file if any
 
 
-class AsyError(StandardError) :
+class AsyError(Exception) :
     pass

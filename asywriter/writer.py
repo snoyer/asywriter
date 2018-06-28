@@ -2,7 +2,7 @@ import os
 from collections import defaultdict, Iterable
 import itertools
 
-from base import AsyBase, AsyError
+from .base import AsyBase, AsyError
 
 
 class AsyWriter(object) :
@@ -208,7 +208,7 @@ def try_converters(all_converters, o) :
             return drawable
 
     # try all converters (input may be a subclass of a registered type)
-    for t, converters in all_converters.iteritems() :
+    for t, converters in all_converters.items() :
         if t == None or isinstance(o,t) :
             for converter in converters :
                 drawable = converter(o)

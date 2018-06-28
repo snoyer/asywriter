@@ -1,5 +1,5 @@
-from base import AsyBase
-from writer import AsyWriter, drawable_converter, pen_converter, convert_to_drawable
+from .base import AsyBase
+from .writer import AsyWriter, drawable_converter, pen_converter, convert_to_drawable
 
 
 
